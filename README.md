@@ -15,8 +15,8 @@ To predict house prices using regression models, with a focus on handling missin
 - Model interpretation showed that `GrLivArea`, `GarageCars`, and `OverallQual` were the top predictors.
 
 ## How to Run
-1. Place `train.csv` and `test.csv` in the `data/` folder.
-2. Install dependencies: `pip install -r requirements.txt`
-3. Open `House_Price_Prediction.ipynb` in Jupyter Notebook and run all cells.
+1. Combine train.csv and test.csv to handle missing values jointly.
+2. Import necessary libraries such as pandas and numpy.
+3. Load the house-price-prediction code into Jupyter Notebook and execute.
 
 > This project is part of my graduate school application portfolio.
