@@ -1,0 +1,57 @@
+# Import required libraries
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split, cross_val_score
+from xgboost import XGBRegressor
+train = pd.read_csv('D:\\1\\train.csv')  # Read the training dataset
+test = pd.read_csv('D:\\1\\test.csv')    # Read the test dataset
+# Preserve 'Id' column from the test set for submission
+test_ids = test['Id']
+# Combine training (excluding target variable) and test sets for unified preprocessing
+all_data = pd.concat([train.drop('SalePrice', axis=1), test], ignore_index=True)
+# Identify numeric features
+numeric_features = all_data.select_dtypes(include=[np.number]).columns
+# Impute missing values in numeric features using median
+all_data[numeric_features] = all_data[numeric_features].fillna(all_data[numeric_features].median())
+# Identify categorical features
+categorical_features = all_data.select_dtypes(exclude=[np.number]).columns
+# Impute missing values in categorical features using mode (most frequent value)
+all_data[categorical_features] = all_data[categorical_features].fillna(all_data[categorical_features].mode().iloc[0])
+# Encode categorical variables using Label Encoding
+for col in categorical_features:
+    le = LabelEncoder()
+    all_data[col] = le.fit_transform(all_data[col].astype(str))
+# Split the combined dataset back into training and test sets
+X_train = all_data.iloc[:len(train)]
+X_test = all_data.iloc[len(train):]
+y_train = train['SalePrice']
+# Initialize and train the XGBoost regression model
+model = XGBRegressor(
+    n_estimators=1000,   # Number of boosting rounds
+    max_depth=6,         # Maximum depth of each tree
+    learning_rate=0.05,  # Step size shrinkage used to prevent overfitting
+    random_state=42      # Random seed for reproducibility
+)
+model.fit(X_train, y_train)
+# Generate predictions on the test set
+predictions = model.predict(X_test)
+submission = pd.DataFrame({
+    'Id': test_ids,
+    'SalePrice': predictions
+})
+submission.to_csv('D:\\1\\submission.csv', index=False)
+print(submission.head())
+y_train_log = np.log(y_train)
+model = XGBRegressor(
+    n_estimators=1000,
+    max_depth=6,
+    learning_rate=0.05,
+    random_state=42
+)
+# Perform 5-fold cross-validation using negative mean squared error
+cv_scores=
+-cross_val_score(model,X_train,y_train_log,cv=5,scoring='neg_mean_squared_error')
+# Convert MSE to RMSE
+rmse_scores = np.sqrt(cv_scores)
+print(f"5-Fold CV RMSE: {rmse_scores.mean():.5f} ± {rmse_scores.std():.5f}")
