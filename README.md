@@ -7,12 +7,11 @@ To predict house prices using regression models, with a focus on handling missin
 
 ## Methodology
 - **Data Preprocessing**: Combined `train.csv` and `test.csv` to impute missing values consistently across datasets.
-- **Feature Engineering**: Created interaction terms (e.g., `TotalBsmtSF × GrLivArea`) and log-transformed skewed features.
-- **Model Selection**: Compared Ridge, Lasso, and XGBoost; selected XGBoost for superior performance.
-- **Hyperparameter Tuning**: Used GridSearchCV to optimize learning rate and tree depth.
+- **Feature Engineering**: Created interaction terms.
+- **Model Selection**: Compared Linear Regression,Random Forest, and XGBoost; selected XGBoost for superior performance.
 
 ## Results
-- Final submission achieved **RMSE = 0.13764** on Kaggle public leaderboard (top 20%).
+- Final submission achieved **RMSE = 0.13764** on Kaggle public leaderboard.
 - Model interpretation showed that `GrLivArea`, `GarageCars`, and `OverallQual` were the top predictors.
 
 ## How to Run
