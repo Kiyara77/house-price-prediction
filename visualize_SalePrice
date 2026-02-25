@@ -1,0 +1,23 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the data
+df = pd.read_csv('D:\\1\\train.csv')
+plt.figure(figsize=(12, 5))
+
+# Original SalePrice histogram
+plt.subplot(1, 2, 1)
+sns.histplot(df['SalePrice'], kde=True)
+plt.title('Original SalePrice Distribution')
+plt.xlabel('SalePrice')
+
+# Original SalePrice Q-Q plot
+plt.subplot(1, 2, 2)
+from scipy import stats
+stats.probplot(df['SalePrice'], dist="norm", plot=plt)
+plt.title('Q-Q Plot of Original SalePrice')
+
+plt.tight_layout()
+plt.show()
