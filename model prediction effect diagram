@@ -1,0 +1,40 @@
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import r2_score
+
+#Load training data
+train_df = pd.read_csv('D:\\1\\train.csv')
+X = train_df.drop(columns=['SalePrice', 'Id'])
+y = train_df['SalePrice']
+
+#Encode categorical variables
+X_num = X.select_dtypes(include=[np.number]).fillna(0)
+
+#Split into training and validation sets
+X_train, X_val, y_train, y_val = train_test_split(X_num, y, test_size=0.2, random_state=42)
+
+#Train the model
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+#Make predictions on the validation set
+y_pred_val = model.predict(X_val)
+
+plt.figure(figsize=(8, 6))
+plt.scatter(y_val, y_pred_val, alpha=0.6)
+plt.plot([y_val.min(), y_val.max()], [y_val.min(), y_val.max()], 'r--')
+plt.xlabel('True SalePrice')
+plt.ylabel('Predicted SalePrice')
+plt.title('Validation Set: True vs Predicted')
+plt.grid(True)
+plt.show()
+
+residuals = y_val - y_pred_val
+plt.figure(figsize=(8, 6))
+plt.scatter(y_pred_val, residuals, alpha=0.6)
+plt.axhline(0, color='r', linestyle='--')
+plt.xlabel('Predicted SalePrice')
+plt.ylabel('Residuals (True - Pred)')
+plt.title('Validation Set: Residual Plot')
+plt.grid(True)
+plt.show()
