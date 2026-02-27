@@ -1,0 +1,35 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+#Load the data
+df = pd.read_csv('D:\\1\\train.csv')
+
+#Calculate the number of missing values in each column
+missing_counts = df.isnull().sum()
+
+#Keep only the columns that have missing values
+missing_cols = missing_counts[missing_counts > 0]
+
+#Plot a bar chart
+plt.figure(figsize=(12, 6))
+sns.barplot(x=missing_cols.index, y=missing_cols.values)
+plt.title('Missing Values Count by Column')
+plt.ylabel('Number of Missing Values')
+plt.xlabel('Column Name')
+plt.xticks(rotation=90)  # Rotate labels to avoid overlap
+plt.tight_layout()
+plt.show()
+
+#Create a missing value matrix
+missing_matrix = df.isnull()
+
+#Plot a heatmap
+plt.figure(figsize=(12, 8))
+sns.heatmap(missing_matrix, cbar=False, cmap='Blues', yticklabels=False)
+plt.title('Missing Value Heatmap')
+plt.xlabel('Features')
+plt.ylabel('Samples')
+plt.tight_layout()
+plt.show()
